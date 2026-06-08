@@ -17,6 +17,7 @@ $error = '';
 
 $namaPoli = '';
 $deskripsi = '';
+$kondisiDitangani = '';
 $dokter = '';
 $jadwal = '';
 $jamOperasional = '';
@@ -25,6 +26,7 @@ $isActive = '1';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $namaPoli = trim($_POST['nama_poli'] ?? '');
     $deskripsi = trim($_POST['deskripsi'] ?? '');
+    $kondisiDitangani = trim($_POST['kondisi_ditangani'] ?? '');
     $dokter = trim($_POST['dokter'] ?? '');
     $jadwal = trim($_POST['jadwal'] ?? '');
     $jamOperasional = trim($_POST['jam_operasional'] ?? '');
@@ -46,16 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $isActiveInt = (int) $isActive;
 
         $stmt = $conn->prepare("
-            INSERT INTO poli 
-                (nama_poli, deskripsi, dokter, jadwal, jam_operasional, is_active)
-            VALUES 
-                (?, ?, ?, ?, ?, ?)
+            INSERT INTO poli
+                (nama_poli, deskripsi, kondisi_ditangani, dokter, jadwal, jam_operasional, is_active)
+            VALUES
+                (?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->bind_param(
-            "sssssi",
+            "ssssssi",
             $namaPoli,
             $deskripsi,
+            $kondisiDitangani,
             $dokter,
             $jadwal,
             $jamOperasional,
@@ -67,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $namaPoli = '';
             $deskripsi = '';
+            $kondisiDitangani = '';
             $dokter = '';
             $jadwal = '';
             $jamOperasional = '';
@@ -193,6 +197,19 @@ include '../includes/sidebar.php';
                         placeholder="Tuliskan deskripsi singkat layanan poli..."
                         required
                     ><?= htmlspecialchars($deskripsi, ENT_QUOTES, 'UTF-8'); ?></textarea>
+                </div>
+
+                <div class="form-group detail-full">
+                    <label for="kondisi_ditangani">Kondisi yang Ditangani</label>
+                    <input
+                        type="text"
+                        id="kondisi_ditangani"
+                        name="kondisi_ditangani"
+                        class="form-control"
+                        value="<?= htmlspecialchars($kondisiDitangani, ENT_QUOTES, 'UTF-8'); ?>"
+                        placeholder="Contoh: Demam, Batuk, Pilek, Sakit Kepala"
+                    >
+                    <small class="form-hint">Pisahkan setiap kondisi dengan tanda koma. Akan ditampilkan sebagai tag di halaman layanan.</small>
                 </div>
             </div>
 

@@ -180,7 +180,7 @@ include __DIR__ . '/includes/header.php';
 							<?php endif; ?>
 
 							<div class="receipt-actions result-actions">
-								<button type="button" class="btn btn-primary" onclick="window.print()"><i class="bi bi-printer"></i> Cetak Bukti</button>
+								<button type="button" class="btn btn-primary" onclick="cetakBukti(this)"><i class="bi bi-printer"></i> Cetak Bukti</button>
 								<a href="pendaftaran.php" class="btn btn-outline"><i class="bi bi-journal-medical"></i> Daftar Lagi</a>
 								<a href="index.php" class="btn btn-outline"><i class="bi bi-house"></i> Kembali ke Beranda</a>
 							</div>

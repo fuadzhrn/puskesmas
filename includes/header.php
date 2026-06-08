@@ -8,6 +8,12 @@ $baseUrl = $baseUrl ?? rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAM
 if ($baseUrl === '/' || $baseUrl === '.') {
 	$baseUrl = '';
 }
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+
+function navClass(string $page, string $current): string {
+	return $page === $current ? 'nav-active' : '';
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -33,16 +39,28 @@ if ($baseUrl === '/' || $baseUrl === '.') {
 			<span class="brand-text">Puskesmas Online</span>
 		</a>
 
-		<button class="menu-toggle" id="menuToggle" aria-label="Buka menu navigasi">
-			<i class="bi bi-list"></i>
+		<button class="menu-toggle" id="menuToggle" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="siteNav">
+			<span class="hamburger-bar"></span>
+			<span class="hamburger-bar"></span>
+			<span class="hamburger-bar"></span>
 		</button>
 
-		<nav class="site-nav" id="siteNav">
-			<a href="<?= htmlspecialchars($baseUrl) ?>/index.php">Beranda</a>
-			<a href="<?= htmlspecialchars($baseUrl) ?>/tentang.php">Tentang</a>
-			<a href="<?= htmlspecialchars($baseUrl) ?>/layanan.php">Layanan</a>
-			<a href="<?= htmlspecialchars($baseUrl) ?>/pendaftaran.php" class="btn-nav">Daftar Online</a>
-			<a href="<?= htmlspecialchars($baseUrl) ?>/cek-pendaftaran.php">Cek Pendaftaran</a>
+		<nav class="site-nav" id="siteNav" aria-hidden="true">
+			<a href="<?= htmlspecialchars($baseUrl) ?>/index.php" class="<?= navClass('index.php', $currentPage) ?>">
+				<i class="bi bi-house"></i> Beranda
+			</a>
+			<a href="<?= htmlspecialchars($baseUrl) ?>/tentang.php" class="<?= navClass('tentang.php', $currentPage) ?>">
+				<i class="bi bi-info-circle"></i> Tentang
+			</a>
+			<a href="<?= htmlspecialchars($baseUrl) ?>/layanan.php" class="<?= navClass('layanan.php', $currentPage) ?>">
+				<i class="bi bi-heart-pulse"></i> Layanan
+			</a>
+			<a href="<?= htmlspecialchars($baseUrl) ?>/cek-pendaftaran.php" class="<?= navClass('cek-pendaftaran.php', $currentPage) ?>">
+				<i class="bi bi-card-checklist"></i> Cek Pendaftaran
+			</a>
+			<a href="<?= htmlspecialchars($baseUrl) ?>/pendaftaran.php" class="btn-nav <?= navClass('pendaftaran.php', $currentPage) ?>">
+				<i class="bi bi-journal-medical"></i> Daftar Online
+			</a>
 		</nav>
 	</div>
 </header>

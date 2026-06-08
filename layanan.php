@@ -18,7 +18,7 @@ if ($stmtKolomStatus) {
 }
 
 if ($punyaKolomStatus) {
-	$stmtPoli = $mysqli->prepare('SELECT id, nama_poli, deskripsi, dokter, jadwal, jam_operasional, status FROM poli WHERE status = ? ORDER BY id ASC');
+	$stmtPoli = $mysqli->prepare('SELECT id, nama_poli, deskripsi, kondisi_ditangani, dokter, jadwal, jam_operasional, status FROM poli WHERE status = ? ORDER BY id ASC');
 	if ($stmtPoli) {
 		$statusAktif = 'aktif';
 		$stmtPoli->bind_param('s', $statusAktif);
@@ -32,7 +32,7 @@ if ($punyaKolomStatus) {
 		$stmtPoli->close();
 	}
 } else {
-	$stmtPoli = $mysqli->prepare('SELECT id, nama_poli, deskripsi, dokter, jadwal, jam_operasional, is_active FROM poli WHERE is_active = ? ORDER BY id ASC');
+	$stmtPoli = $mysqli->prepare('SELECT id, nama_poli, deskripsi, kondisi_ditangani, dokter, jadwal, jam_operasional, is_active FROM poli WHERE is_active = ? ORDER BY id ASC');
 	if ($stmtPoli) {
 		$isActive = 1;
 		$stmtPoli->bind_param('i', $isActive);
@@ -69,6 +69,14 @@ include __DIR__ . '/includes/header.php';
 			<p>Data di bawah menampilkan layanan poli yang sedang aktif di puskesmas.</p>
 		</div>
 
+		<div class="panduan-box">
+			<span class="panduan-icon"><i class="bi bi-info-circle-fill"></i></span>
+			<div>
+				<strong>Cara memilih poli yang tepat</strong>
+				<p>Perhatikan <strong>tag kondisi</strong> pada setiap kartu poli di bawah. Tag tersebut menunjukkan keluhan atau kondisi yang ditangani oleh poli tersebut. Pilih poli yang sesuai dengan keluhan Anda, lalu klik tombol <strong>Daftar Sekarang</strong>.</p>
+			</div>
+		</div>
+
 		<div class="service-grid">
 			<?php if (!empty($daftarPoli)): ?>
 				<?php foreach ($daftarPoli as $poli): ?>
@@ -85,10 +93,19 @@ include __DIR__ . '/includes/header.php';
 							<?= htmlspecialchars($poli['deskripsi'] ?: 'Layanan kesehatan yang tersedia untuk pendaftaran pasien.') ?>
 						</p>
 
+						<?php if (!empty($poli['kondisi_ditangani'])): ?>
+							<div class="kondisi-tags">
+								<?php foreach (explode(',', $poli['kondisi_ditangani']) as $tag): ?>
+									<?php $tag = trim($tag); if ($tag !== ''): ?>
+										<span class="kondisi-tag"><?= htmlspecialchars($tag) ?></span>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</div>
+						<?php endif; ?>
+
 						<ul class="service-meta">
 							<li><i class="bi bi-calendar-check"></i> Jadwal: <?= htmlspecialchars($poli['jadwal'] ?: '-') ?></li>
 							<li><i class="bi bi-clock"></i> Jam operasional: <?= htmlspecialchars($poli['jam_operasional'] ?: '-') ?></li>
-							<li><i class="bi bi-badge-ad"></i> Status: <?= htmlspecialchars($poli['status'] ?? ($poli['is_active'] ? 'aktif' : 'nonaktif')) ?></li>
 						</ul>
 
 						<a href="pendaftaran.php?poli=<?= (int) $poli['id'] ?>" class="card-link card-link-primary">
@@ -110,8 +127,8 @@ include __DIR__ . '/includes/header.php';
 <section class="section section-help">
 	<div class="container help-box">
 		<div>
-			<p class="help-kicker">Masih bingung memilih layanan?</p>
-			<h2>Cek pendaftaran atau langsung daftar online sekarang.</h2>
+			<p class="help-kicker">Sudah tahu poli yang Anda butuhkan?</p>
+			<h2>Daftar sekarang atau cek status pendaftaran Anda.</h2>
 		</div>
 		<div class="hero-actions help-actions">
 			<a href="cek-pendaftaran.php" class="btn btn-outline"><i class="bi bi-search"></i> Cek Pendaftaran</a>

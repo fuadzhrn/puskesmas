@@ -25,10 +25,11 @@ $error = '';
 function getPoliById($conn, $id)
 {
     $stmt = $conn->prepare("
-        SELECT 
+        SELECT
             id,
             nama_poli,
             deskripsi,
+            kondisi_ditangani,
             dokter,
             jadwal,
             jam_operasional,
@@ -55,6 +56,7 @@ if (!$poli) {
 
 $namaPoli = $poli['nama_poli'];
 $deskripsi = $poli['deskripsi'];
+$kondisiDitangani = $poli['kondisi_ditangani'] ?? '';
 $dokter = $poli['dokter'];
 $jadwal = $poli['jadwal'];
 $jamOperasional = $poli['jam_operasional'];
@@ -63,6 +65,7 @@ $isActive = (string) $poli['is_active'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $namaPoli = trim($_POST['nama_poli'] ?? '');
     $deskripsi = trim($_POST['deskripsi'] ?? '');
+    $kondisiDitangani = trim($_POST['kondisi_ditangani'] ?? '');
     $dokter = trim($_POST['dokter'] ?? '');
     $jadwal = trim($_POST['jadwal'] ?? '');
     $jamOperasional = trim($_POST['jam_operasional'] ?? '');
@@ -85,9 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $conn->prepare("
             UPDATE poli
-            SET 
+            SET
                 nama_poli = ?,
                 deskripsi = ?,
+                kondisi_ditangani = ?,
                 dokter = ?,
                 jadwal = ?,
                 jam_operasional = ?,
@@ -96,9 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
 
         $stmt->bind_param(
-            "sssssii",
+            "ssssssii",
             $namaPoli,
             $deskripsi,
+            $kondisiDitangani,
             $dokter,
             $jadwal,
             $jamOperasional,
@@ -111,6 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $poli = getPoliById($conn, $id);
             $namaPoli = $poli['nama_poli'];
             $deskripsi = $poli['deskripsi'];
+            $kondisiDitangani = $poli['kondisi_ditangani'] ?? '';
             $dokter = $poli['dokter'];
             $jadwal = $poli['jadwal'];
             $jamOperasional = $poli['jam_operasional'];
@@ -287,6 +293,19 @@ include '../includes/sidebar.php';
                         placeholder="Tuliskan deskripsi singkat layanan poli..."
                         required
                     ><?= htmlspecialchars($deskripsi, ENT_QUOTES, 'UTF-8'); ?></textarea>
+                </div>
+
+                <div class="form-group detail-full">
+                    <label for="kondisi_ditangani">Kondisi yang Ditangani</label>
+                    <input
+                        type="text"
+                        id="kondisi_ditangani"
+                        name="kondisi_ditangani"
+                        class="form-control"
+                        value="<?= htmlspecialchars($kondisiDitangani, ENT_QUOTES, 'UTF-8'); ?>"
+                        placeholder="Contoh: Demam, Batuk, Pilek, Sakit Kepala"
+                    >
+                    <small class="form-hint">Pisahkan setiap kondisi dengan tanda koma. Akan ditampilkan sebagai tag di halaman layanan.</small>
                 </div>
             </div>
 

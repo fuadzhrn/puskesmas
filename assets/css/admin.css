@@ -918,6 +918,13 @@ body.admin-dashboard-page {
 	}
 }
 
+.form-hint {
+	display: block;
+	margin-top: 5px;
+	font-size: 0.83rem;
+	color: #6b7280;
+}
+
 .admin-card.summary-card {
 	grid-template-columns: repeat(4, minmax(0, 1fr));
 }

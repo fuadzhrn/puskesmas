@@ -80,6 +80,7 @@ include __DIR__ . '/includes/header.php';
 		<div class="service-grid">
 			<?php if (!empty($daftarPoli)): ?>
 				<?php foreach ($daftarPoli as $poli): ?>
+					<?php $buka = cekStatusBuka((string)($poli['jadwal'] ?? ''), (string)($poli['jam_operasional'] ?? '')); ?>
 					<article class="service-card service-card-layanan">
 						<div class="card-top">
 							<span class="card-icon"><i class="bi bi-hospital-fill"></i></span>
@@ -87,6 +88,10 @@ include __DIR__ . '/includes/header.php';
 								<h3><?= htmlspecialchars($poli['nama_poli']) ?></h3>
 								<p class="card-subtitle">Dokter: <?= htmlspecialchars($poli['dokter'] ?: '-') ?></p>
 							</div>
+							<span class="poli-status-badge <?= $buka ? 'poli-buka' : 'poli-tutup' ?>">
+								<span class="poli-dot"></span>
+								<?= $buka ? 'Buka' : 'Tutup' ?>
+							</span>
 						</div>
 
 						<p class="service-desc">

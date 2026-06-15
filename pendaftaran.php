@@ -385,7 +385,7 @@ include __DIR__ . '/includes/header.php';
 			<?php endif; ?>
 
 			<?php if (!empty($daftarPoli)): ?>
-				<form class="registration-form card-shell" method="post" action="pendaftaran.php" data-registration-form novalidate>
+				<form class="registration-form card-shell" method="post" action="pendaftaran.php" data-registration-form data-base-url="<?= esc($baseUrl ?? '') ?>" novalidate>
 					<div class="form-progress">
 						<span class="step-dot is-active" data-step-dot>1</span>
 						<span class="step-line"></span>
@@ -517,12 +517,15 @@ include __DIR__ . '/includes/header.php';
 									<label for="sesi">Sesi</label>
 									<select id="sesi" name="sesi" required>
 										<option value="">-- Pilih Sesi --</option>
-										<option value="Pagi" <?= $sesi === 'Pagi' ? 'selected' : '' ?>>Pagi</option>
-										<option value="Siang" <?= $sesi === 'Siang' ? 'selected' : '' ?>>Siang</option>
-										<option value="Sore" <?= $sesi === 'Sore' ? 'selected' : '' ?>>Sore</option>
+										<option value="Pagi" <?= $sesi === 'Pagi' ? 'selected' : '' ?>>Pagi (08.00 – 11.00)</option>
+										<option value="Siang" <?= $sesi === 'Siang' ? 'selected' : '' ?>>Siang (11.00 – 14.00)</option>
+										<option value="Sore" <?= $sesi === 'Sore' ? 'selected' : '' ?>>Sore (14.00 – 16.00)</option>
 									</select>
 								</div>
 							</div>
+
+							<div id="infoAntrian" class="info-antrian" hidden></div>
+
 							<div class="step-actions">
 								<button type="button" class="btn btn-outline" data-step-prev>Kembali</button>
 								<button type="button" class="btn btn-primary" data-step-next>Lanjut</button>
